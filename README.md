@@ -105,6 +105,14 @@ report = det.report()
 - Not a replacement for Ragas (which does *offline* eval on a golden set).
 - Not Arize/Phoenix — those are platforms; this is a library that writes to a sink you choose.
 
+## Sibling libraries
+
+If your RAG runs on AWS Bedrock, two companion libraries:
+
+- [**bedrockcache**](https://github.com/MukundaKatta/bedrockcache) — audit Anthropic prompt caching across the Bedrock + LiteLLM + Strands stack.
+- [**bedrockstack**](https://github.com/MukundaKatta/bedrockstack) — Bedrock-aware retry policy, cost ledger, streaming-error normalization.
+- **ragvitals** (this) — 5-dimensional production drift detection for the RAG pipeline above.
+
 ## Roadmap
 
 - v0.2: pluggable statistical tests (KS, MWU) instead of z-score-only.
