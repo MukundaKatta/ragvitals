@@ -26,7 +26,7 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import Iterable
 
-from ragdrift.types import DimensionReport, Severity, Trace
+from ragvitals.types import DimensionReport, Severity, Trace
 
 
 # ---------- base ----------

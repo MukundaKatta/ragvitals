@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from ragdrift import (
+from ragvitals import (
     EmbeddingDrift,
     JudgeDrift,
     QueryDistribution,

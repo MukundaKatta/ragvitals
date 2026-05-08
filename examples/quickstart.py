@@ -1,4 +1,4 @@
-"""Minimal end-to-end ragdrift example.
+"""Minimal end-to-end ragvitals example.
 
 Run:  python examples/quickstart.py
 """
@@ -6,7 +6,7 @@ Run:  python examples/quickstart.py
 import random
 from datetime import datetime, timedelta
 
-from ragdrift import (
+from ragvitals import (
     Detector,
     InMemorySink,
     QueryDistribution,

@@ -1,20 +1,20 @@
-"""ragdrift: 5-dimensional production drift detection for RAG systems."""
+"""ragvitals: 5-dimensional production drift detection for RAG systems."""
 
-from ragdrift.detector import (
+from ragvitals.detector import (
     CloudWatchSink,
     Detector,
     InMemorySink,
     JSONLSink,
     Sink,
 )
-from ragdrift.dimensions import (
+from ragvitals.dimensions import (
     EmbeddingDrift,
     JudgeDrift,
     QueryDistribution,
     ResponseQuality,
     RetrievalRelevance,
 )
-from ragdrift.types import DetectorReport, DimensionReport, Severity, Trace
+from ragvitals.types import DetectorReport, DimensionReport, Severity, Trace
 
 __all__ = [
     "Detector",

@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from ragdrift import (
+from ragvitals import (
     Detector,
     InMemorySink,
     JSONLSink,
@@ -86,7 +86,7 @@ def test_cloudwatch_sink_raises_clearly_without_boto():
         pytest.skip("boto3 is installed; skipping the negative-import test")
     except ImportError:
         pass
-    from ragdrift import CloudWatchSink, DetectorReport
+    from ragvitals import CloudWatchSink, DetectorReport
     sink = CloudWatchSink(namespace="rag/test")
     report = DetectorReport(window_start=_ts(0), window_end=_ts(1), dimensions=[])
     with pytest.raises(ImportError) as exc:

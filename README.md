@@ -1,8 +1,8 @@
-# ragdrift
+# ragvitals
 
-[![ci](https://github.com/MukundaKatta/ragdrift/actions/workflows/ci.yml/badge.svg)](https://github.com/MukundaKatta/ragdrift/actions/workflows/ci.yml)
-[![pypi](https://img.shields.io/pypi/v/ragdrift.svg)](https://pypi.org/project/ragdrift/)
-[![python](https://img.shields.io/pypi/pyversions/ragdrift.svg)](https://pypi.org/project/ragdrift/)
+[![ci](https://github.com/MukundaKatta/ragvitals/actions/workflows/ci.yml/badge.svg)](https://github.com/MukundaKatta/ragvitals/actions/workflows/ci.yml)
+[![pypi](https://img.shields.io/pypi/v/ragvitals.svg)](https://pypi.org/project/ragvitals/)
+[![python](https://img.shields.io/pypi/pyversions/ragvitals.svg)](https://pypi.org/project/ragvitals/)
 
 Five-dimensional production drift detection for RAG systems. Library, not a platform — bring your own time-series store.
 
@@ -16,21 +16,21 @@ Production RAG rots in five dimensions:
 4. **Response quality** — LLM-as-judge scores degrade
 5. **Judge drift** — the judge itself drifts, and you can't tell whether the system improved or the ruler moved
 
-Existing tools cover one or two of these. `ragdrift` composes the five with the same time-series store, alarming, and replay path. No platform lock-in.
+Existing tools cover one or two of these. `ragvitals` composes the five with the same time-series store, alarming, and replay path. No platform lock-in.
 
 ## Install
 
 ```bash
-pip install ragdrift
+pip install ragvitals
 # optional: CloudWatch sink
-pip install "ragdrift[aws]"
+pip install "ragvitals[aws]"
 ```
 
 ## Quickstart
 
 ```python
 from datetime import datetime
-from ragdrift import (
+from ragvitals import (
     Detector, Trace,
     QueryDistribution, RetrievalRelevance, ResponseQuality, JudgeDrift,
     InMemorySink,
@@ -84,11 +84,11 @@ Each dimension only needs the fields it cares about. Missing fields produce `OK`
 ## Sinks
 
 ```python
-from ragdrift import InMemorySink, JSONLSink, CloudWatchSink
+from ragvitals import InMemorySink, JSONLSink, CloudWatchSink
 
 InMemorySink()                                  # tests, REPL
-JSONLSink(path="/var/log/ragdrift.jsonl")       # cheap, append-only
-CloudWatchSink(namespace="rag/prod")            # boto3-backed, requires `pip install ragdrift[aws]`
+JSONLSink(path="/var/log/ragvitals.jsonl")       # cheap, append-only
+CloudWatchSink(namespace="rag/prod")            # boto3-backed, requires `pip install ragvitals[aws]`
 ```
 
 ## Replay against a frozen pipeline

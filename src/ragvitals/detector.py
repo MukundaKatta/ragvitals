@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Iterable, Iterator, Protocol
 
-from ragdrift.types import DetectorReport, DimensionReport, Severity, Trace
+from ragvitals.types import DetectorReport, DimensionReport, Severity, Trace
 
 
 class _Dimension(Protocol):
