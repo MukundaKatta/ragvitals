@@ -113,6 +113,8 @@ If your RAG runs on AWS Bedrock, two companion libraries:
 - [**bedrockstack**](https://github.com/MukundaKatta/bedrockstack) — Bedrock-aware retry policy, cost ledger, streaming-error normalization.
 - **ragvitals** (this) — 5-dimensional production drift detection for the RAG pipeline above.
 
+Landing repo with a runnable 50-line example wiring all three together: **[bedrock-production-stack](https://github.com/MukundaKatta/bedrock-production-stack)**.
+
 ## Roadmap
 
 - v0.2: pluggable statistical tests (KS, MWU) instead of z-score-only.
