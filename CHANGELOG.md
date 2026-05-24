@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.0 — 2026-05-24
+
+- Integrated 5-dimension drift demo + Streamlit dashboard.
+- `examples/integrated_drift_dashboard.py`: CLI demo that wires all
+  five drift dimensions (QueryDistribution, RetrievalRelevance,
+  EmbeddingDrift, ResponseQuality, JudgeDrift) against a deterministic
+  500-document synthetic corpus. One `days_aged` knob shifts the query
+  distribution, stales retrievals, slows latencies, and drifts judge
+  scores. Prints a side-by-side ASCII table at ages 0, 7, 14, 21, 30.
+- `examples/streamlit_drift_dashboard.py`: thin Streamlit shell on top
+  of the same simulation. One slider, five live panels, one
+  DriftReport summary.
+- 5 new tests covering the integrated demo entrypoints (22 total).
+
 ## 0.1.0 — initial release
 
 - `Detector` orchestrating five composable drift dimensions:

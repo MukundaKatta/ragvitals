@@ -98,6 +98,34 @@ det.ingest_jsonl("s3-or-local-path-to/traces.jsonl")
 report = det.report()
 ```
 
+## Integrated drift demo
+
+The five dimensions are also wired together against one synthetic
+500-document corpus, so you can see them react to the same event:
+
+- **CLI:** `python examples/integrated_drift_dashboard.py`
+  Prints a side-by-side ASCII table at ages 0, 7, 14, 21, 30.
+- **Streamlit:** `streamlit run examples/streamlit_drift_dashboard.py`
+  One slider for `days_aged` (0 to 30), five live panels, one DriftReport.
+
+Both demos share the same corpus, topic distribution, and drift simulation
+in `examples/integrated_drift_dashboard.py`. The CLI version is what runs
+in CI and pastes into screenshots.
+
+Sample CLI output:
+
+```
+metric                       | age= 0           | age= 7           | age=14           | age=21           | age=30
+---------------------------------------------------------------------------------------------------------------------
+QueryDistribution            | 0.502 [ok]       | 0.619 [degraded] | 0.733 [degraded] | 0.754 [degraded] | 0.851 [degraded]
+RetrievalRelevance           | 1.000 [ok]       | 0.920 [warn]     | 0.820 [warn]     | 0.800 [warn]     | 0.700 [degraded]
+EmbeddingDrift               | 0.503 [ok]       | 0.619 [degraded] | 0.733 [degraded] | 0.754 [degraded] | 0.851 [degraded]
+ResponseQuality.faithfulness | 0.909 [ok]       | 0.867 [degraded] | 0.836 [degraded] | 0.798 [degraded] | 0.755 [degraded]
+JudgeDrift                   | -0.001 [ok]      | -0.037 [ok]      | -0.069 [warn]    | -0.112 [degraded]| -0.146 [degraded]
+latency p50 (ms)             | 119              | 228              | 347              | 460              | 599
+latency p95 (ms)             | 163              | 561              | 726              | 493              | 665
+```
+
 ## What it explicitly is not
 
 - Not a tracing tool. Bring your own JSONL / OpenTelemetry / Phoenix upstream.
