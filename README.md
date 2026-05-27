@@ -84,12 +84,43 @@ Each dimension only needs the fields it cares about. Missing fields produce `OK`
 ## Sinks
 
 ```python
-from ragvitals import InMemorySink, JSONLSink, CloudWatchSink
+from ragvitals import InMemorySink, JSONLSink, CloudWatchSink, PhoenixSink
 
 InMemorySink()                                  # tests, REPL
 JSONLSink(path="/var/log/ragvitals.jsonl")       # cheap, append-only
 CloudWatchSink(namespace="rag/prod")            # boto3-backed, requires `pip install ragvitals[aws]`
+PhoenixSink(endpoint="http://localhost:4317",   # Arize Phoenix / Arize Cloud (OTLP)
+            project_name="ragvitals")            # requires `pip install ragvitals[phoenix]`
 ```
+
+## Arize Phoenix integration
+
+`PhoenixSink` ships every `DetectorReport` to Arize Phoenix as an
+OpenTelemetry span tree: one parent span per detection window
+(`ragvitals.detector.report`) with one child span per dimension
+(`ragvitals.dimension.<name>`). Each child carries the drift score,
+severity, baseline, z-score, sample size, and detail string as span
+attributes Phoenix indexes and renders. Drift events land on the same
+timeline as your existing Phoenix-instrumented LLM and retrieval calls,
+so on-call sees the correlation in one UI.
+
+```python
+from ragvitals import Detector, PhoenixSink, QueryDistribution
+
+det = Detector(
+    dimensions=[QueryDistribution()],
+    sinks=[PhoenixSink(
+        endpoint="http://localhost:4317",        # local Phoenix collector
+        project_name="ragvitals-prod",
+    )],
+)
+```
+
+For **Arize Cloud (managed Phoenix)**, point `endpoint` at the OTLP URL
+from your Arize space settings and add `headers={"api-key": "..."}`.
+
+`PhoenixSink` is the bridge between ragvitals (the drift library) and
+Phoenix (the platform). Install with `pip install ragvitals[phoenix]`.
 
 ## Replay against a frozen pipeline
 

@@ -170,33 +170,36 @@ if run_button:
     )
 
     st.subheader("Per-dimension verdicts")
-    for dim, verdict in report.per_dimension.items():
-        with st.expander(f"{dim}  ·  {verdict.status}"):
+    for d in report.dimensions:
+        with st.expander(f"{d.name}  ·  {d.severity.value}"):
             st.json(
                 {
-                    "status": verdict.status,
-                    "score": verdict.score,
-                    "threshold": verdict.threshold,
-                    "sample_size": verdict.sample_size,
-                    "details": verdict.details,
+                    "severity": d.severity.value,
+                    "value": d.value,
+                    "baseline": d.baseline,
+                    "z_score": d.z_score,
+                    "sample_size": d.sample_size,
+                    "detail": d.detail,
                 }
             )
 
-    st.subheader("Trace tail")
-    recent = det.dimensions[0].sink.recent() if det.dimensions else []
-    if recent:
-        st.dataframe(
-            [
-                {
-                    "ts": str(t.timestamp),
-                    "ref_id": t.metadata.get("reference_id"),
-                    "labels": t.relevance_labels,
-                    "judge": t.judge_scores,
-                }
-                for t in recent[-10:]
-            ],
-            use_container_width=True,
-        )
+    st.subheader("Arize Phoenix export")
+    st.markdown(
+        "Send this report to your Phoenix project with the built-in "
+        "`PhoenixSink` (one OpenTelemetry span per dimension):"
+    )
+    st.code(
+        "from ragvitals import Detector, PhoenixSink\n"
+        "\n"
+        "det = Detector(\n"
+        "    dimensions=[...],\n"
+        "    sinks=[PhoenixSink(\n"
+        "        endpoint='http://localhost:4317',\n"
+        "        project_name='ragvitals-prod',\n"
+        "    )],\n"
+        ")",
+        language="python",
+    )
 
 else:
     st.info(
@@ -215,8 +218,12 @@ else:
 
             **Architecture.** Streamlit talks to ragvitals.Detector, which
             composes five dimension instances. The same code paths run here as
-            in `pip install ragvitals` — only the trace source (synthetic vs
+            in `pip install ragvitals`; only the trace source (synthetic vs
             live RAG pipeline) differs.
+
+            **Arize integration.** Every `DetectorReport` can be streamed to
+            Arize Phoenix via the built-in `PhoenixSink` (OpenTelemetry spans).
+            Install with `pip install ragvitals[phoenix]` to enable it.
             """
         ).strip()
     )

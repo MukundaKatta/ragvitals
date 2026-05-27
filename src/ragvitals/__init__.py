@@ -7,6 +7,7 @@ from ragvitals.detector import (
     JSONLSink,
     Sink,
 )
+from ragvitals.phoenix_sink import PhoenixSink
 from ragvitals.dimensions import (
     EmbeddingDrift,
     JudgeDrift,
@@ -31,5 +32,6 @@ __all__ = [
     "InMemorySink",
     "JSONLSink",
     "CloudWatchSink",
+    "PhoenixSink",
 ]
-__version__ = "0.2.0"
+__version__ = "0.3.0"
