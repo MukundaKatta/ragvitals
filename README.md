@@ -81,6 +81,29 @@ Trace(
 
 Each dimension only needs the fields it cares about. Missing fields produce `OK`-with-empty-sample reports rather than errors.
 
+## Tuning detectors
+
+Every dimension exposes the same alarming knobs:
+
+```python
+RetrievalRelevance(
+    metric="hit_rate",   # "hit_rate" | "precision_at_k" | "mrr"
+    k=10,                # top-k cutoff applied to relevance_labels
+    baseline_size=200,   # how many committed windows the rolling baseline keeps
+    warn_z=2.0,          # |z| at which a dimension warns
+    degraded_z=3.0,      # |z| at which a dimension degrades
+)
+```
+
+- `baseline_size` controls the length of the trailing baseline each
+  `commit_window()` feeds. Larger = smoother, slower to react; smaller =
+  twitchier. It applies to `QueryDistribution`, `RetrievalRelevance`,
+  `EmbeddingDrift`, and `ResponseQuality`.
+- `JudgeDrift` alarms on the absolute mean delta against the frozen
+  reference set instead of a z-score, so it uses `warn_abs` / `degraded_abs`.
+- `QueryDistribution` and `EmbeddingDrift` require a reference centroid via
+  `set_reference(embeddings)` before they report anything meaningful.
+
 ## Sinks
 
 ```python
@@ -181,6 +204,16 @@ Landing repo with a runnable 50-line example wiring all three together: **[bedro
 - v0.4: drift attribution (which docs / users / queries are most responsible).
 
 ## Develop
+
+The test suite is pure standard-library `unittest`, so it needs no test
+dependencies:
+
+```bash
+pip install -e .
+python -m unittest discover -s tests -v
+```
+
+`pytest` (in the `dev` extra) also runs the same suite if you prefer it:
 
 ```bash
 pip install -e ".[dev]"

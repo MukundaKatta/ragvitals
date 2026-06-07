@@ -18,5 +18,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - run: pip install -e ".[dev]"
-      - run: pytest -v
+      # Install the package itself (no test deps needed — the suite is
+      # standard-library ``unittest``).
+      - run: pip install -e .
+      - run: python -m py_compile $(git ls-files '*.py')
+      - run: python -m unittest discover -s tests -v

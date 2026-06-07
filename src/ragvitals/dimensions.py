@@ -140,6 +140,13 @@ class QueryDistribution:
     _baseline: _RollingBaseline = field(default_factory=lambda: _RollingBaseline(size=1000))
     _window: list[float] = field(default_factory=list)
 
+    def __post_init__(self) -> None:
+        # Honor a user-supplied baseline_size. The default_factory above can't
+        # see the instance's baseline_size, so without this the field would be
+        # silently ignored and the rolling baseline would always be 1000.
+        if self._baseline.size != self.baseline_size:
+            self._baseline = _RollingBaseline(size=self.baseline_size)
+
     def set_reference(self, embeddings: Iterable[Iterable[float]]) -> None:
         self._ref_centroid = _centroid(embeddings)
 
@@ -190,6 +197,11 @@ class RetrievalRelevance:
     _baseline: _RollingBaseline = field(default_factory=lambda: _RollingBaseline(size=100))
     _window_scores: list[float] = field(default_factory=list)
 
+    def __post_init__(self) -> None:
+        # Honor a user-supplied baseline_size (see QueryDistribution note).
+        if self._baseline.size != self.baseline_size:
+            self._baseline = _RollingBaseline(size=self.baseline_size)
+
     def update(self, trace: Trace) -> None:
         if not trace.relevance_labels:
             return
@@ -232,11 +244,17 @@ class EmbeddingDrift:
     """Centroid drift of retrieved-doc embeddings vs a reference snapshot."""
 
     name: str = "EmbeddingDrift"
+    baseline_size: int = 1000
     warn_z: float = 2.0
     degraded_z: float = 3.0
     _ref_centroid: list[float] | None = None
     _baseline: _RollingBaseline = field(default_factory=lambda: _RollingBaseline(size=1000))
     _window: list[float] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        # Honor a user-supplied baseline_size (see QueryDistribution note).
+        if self._baseline.size != self.baseline_size:
+            self._baseline = _RollingBaseline(size=self.baseline_size)
 
     def set_reference(self, embeddings: Iterable[Iterable[float]]) -> None:
         self._ref_centroid = _centroid(embeddings)
