@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+- **Fix:** `QueryDistribution`, `RetrievalRelevance`, and `EmbeddingDrift`
+  now honor a user-supplied `baseline_size`. Previously the rolling baseline
+  was constructed with a hard-coded size in the dataclass `default_factory`,
+  so passing `baseline_size=...` was silently ignored (the buffer always
+  stayed at its default of 1000 / 100). `EmbeddingDrift` also gains a
+  `baseline_size` field for parity with the other dimensions.
+- Test suite converted to pure standard-library `unittest` so it runs with
+  `python -m unittest discover -s tests` without any third-party test
+  dependencies. pytest still runs the same suite. Added regression coverage
+  for the `baseline_size` fix.
+- CI now installs only the package (no test extras) and runs
+  `python -m py_compile` plus the `unittest` suite across Python 3.10–3.13.
+- README: documented the per-dimension tuning knobs (`baseline_size`,
+  `warn_z`/`degraded_z`, `warn_abs`/`degraded_abs`).
+
 ## 0.2.0 — 2026-05-24
 
 - Integrated 5-dimension drift demo + Streamlit dashboard.
